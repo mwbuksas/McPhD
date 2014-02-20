@@ -8,6 +8,7 @@ import Data.Vector.V2
 import Mesh.Classes
 
 import Space.Cartesian1D
+import Space.Classes
 import NormalizedValues
 import RandomSamples
 import Approx
@@ -64,10 +65,10 @@ instance Mesh Cartesian1DMesh where
 
   cell_boundary mesh cell location (Distance distance) =
       let bounds  = cellBounds mesh cell
-          cos_dir = v2x $ normalized_value $ dir location
+          cos_dir = v2x $ normalized_value $ direction location
           (x_distance, face) = if cos_dir > 0
-                               then (snd bounds - pos location, Positive)
-                               else (fst bounds - pos location, Negative)
+                               then (snd bounds - position location, Positive)
+                               else (fst bounds - position location, Negative)
       in if abs x_distance < distance * abs cos_dir
          then Just ( Distance (x_distance / cos_dir), face)
          else Nothing
@@ -99,8 +100,8 @@ cellBoundsTest :: (Double -> Double -> Bool)
                   -> (Double, Double)
                   -> Bool
 cellBoundsTest comp location (xMin, xMax) =
-  let x       = pos location
-      cos_dir = v2x . normalized_value $ dir location
+  let x       = position location
+      cos_dir = v2x . normalized_value $ direction location
   in ((x > xMin) || ( (x `comp` xMin) && cos_dir >= 0)) &&
      ((x < xMax) || ( (x `comp` xMax) && cos_dir < 0))
 

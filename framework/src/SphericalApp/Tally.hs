@@ -23,7 +23,7 @@ module SphericalApp.Tally where
 import Data.Monoid
 import qualified Data.Map as Map
 
-import Utils.Combinators
+-- import Utils.Combinators
 
 import Mesh.Classes
 import Mesh.Spherical

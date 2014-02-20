@@ -133,7 +133,7 @@ absorptionContractor model particle =
 -- Spherical coordaintes and still being in cell 0. Although, this
 -- could be considered a kind of reflection.
 --
--- It it appears that Events are different than the mesh's neighbor
+-- It appears that Events are different than the mesh's neighbor
 -- relationships, but in this model, they look very much alike.
 
 -- You can argue that the tally should record _exactly_ the events

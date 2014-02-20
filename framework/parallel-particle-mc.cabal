@@ -35,7 +35,7 @@ Library
       src
    build-depends:
       base > 3 && <= 6
-      , AC-Vector == 2.3.1
+      , AC-Vector
       , QuickCheck
    exposed-modules: Approx, NormalizedValues, Numerics, Properties, Vectors
    exposed-modules: Generators, RandomNumbers, RandomSamples
@@ -55,11 +55,11 @@ executable TestSuite
     build-depends: base >=3 && <=6
                    , random
                    , hpc
-                   , AC-Vector == 2.*
+                   , AC-Vector
                    , containers
-                   , array == 0.3.*
-                   , mersenne-random-pure64 == 0.2.*
-                   , HUnit == 1.2.*
+                   , array
+                   , mersenne-random-pure64
+                   , HUnit
                    , test-framework-hunit
                    , test-framework-quickcheck2
                    , test-framework
@@ -75,22 +75,22 @@ executable MiniApp
   build-depends: base >=3 && <=6
                    , random
                    , hpc
-                   , AC-Vector == 2.*
+                   , AC-Vector
                    , containers
-                   , array == 0.3.*
-                   , mersenne-random-pure64 == 0.2.*
+                   , mersenne-random-pure64
+                   , array
 
-executable SphericalApp
-  hs-source-dirs: ./src ./src/SphericalApp
-  ghc-options: -Wall -fwarn-tabs -fno-warn-name-shadowing -fno-warn-orphans
-  ghc-options: -rtsopts -threaded
-  main-is: SphericalApp/Main.hs
-  build-depends: base >=3 && <=6
-                   , random
-                   , hpc
-                   , AC-Vector == 2.*
-                   , containers
-                   , array == 0.3.*
-                   , mersenne-random-pure64 == 0.2.*
+-- executable SphericalApp
+--   hs-source-dirs: ./src ./src/SphericalApp
+--   ghc-options: -Wall -fwarn-tabs -fno-warn-name-shadowing -fno-warn-orphans
+--   ghc-options: -rtsopts -threaded
+--   main-is: SphericalApp/Main.hs
+--   build-depends: base >=3 && <=6
+--                    , random
+--                    , hpc
+--                    , AC-Vector == 2.*
+--                    , containers
+--                    , array
+--                    , mersenne-random-pure64 == 0.2.*
 
 

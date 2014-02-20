@@ -1,3 +1,4 @@
+{-# LANGUAGE DatatypeContexts #-}
 module MiniApp.Physics where
 
 import Space.Classes

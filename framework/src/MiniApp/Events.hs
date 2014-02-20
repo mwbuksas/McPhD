@@ -1,4 +1,4 @@
-{-# LANGUAGE StandaloneDeriving, FlexibleContexts, UndecidableInstances #-}
+{-# LANGUAGE StandaloneDeriving, FlexibleContexts, UndecidableInstances, DatatypeContexts #-}
 
 {-| Datatypes for events generated during simulation.
 
@@ -12,7 +12,8 @@ Events of particle motion fall into categories:
 -}
 module MiniApp.Events where
 
-import qualified Space.Classes as Space
+import Data.Function
+
 import Mesh.Classes hiding (Cell)
 import Properties
 
@@ -32,15 +33,32 @@ finalBoundary Escape  = True
 finalBoundary Reflect = False
 
 
--- | Combining the event types into a single data type with tally information.
-data (Mesh m) => Event m = Collide  { collideType   :: CollideType
-                                    , deltaMomentum :: Momentum (MeshSpace m)
-                                    , energyDep     :: Energy
-                                    }
-                         | Boundary { boundaryType  :: BoundaryType
-                                    , faceIndex     :: MeshFace m
-                                    }
-                         | Timeout
+-- | A datatype of all the things that can happen to the particle,
+-- along with the information we need to store.
+data (Mesh m) => Outcome m = Collide  { collideType   :: CollideType
+                                      , deltaMomentum :: Momentum (MeshSpace m)
+                                      , energyDep     :: Energy
+                                      }
+                           | Boundary { boundaryType  :: BoundaryType
+                                      , faceIndex     :: MeshFace m
+                                      }
+                           | Timeout
+
+deriving instance (Mesh m, Show m
+                  , Show (MeshSpace m)
+                  , Show (MeshFace m)
+                  , Show (Momentum (MeshSpace m))) => Show (Outcome m)
+
+
+-- | Events are the possible particle outcomes, paired with a distance of travel.
+data (Mesh m) => Event m = Event { distance :: !Distance , outcome :: Outcome m }
+
+-- | We compare events by their distance
+instance (Mesh m) => Eq (Event m) where
+  (==) = (==) `on` distance
+
+instance (Mesh m) => Ord (Event m) where
+  compare = compare `on` distance
 
 deriving instance (Mesh m, Show m
                   , Show (MeshSpace m)
@@ -48,11 +66,13 @@ deriving instance (Mesh m, Show m
                   , Show (Momentum (MeshSpace m))) => Show (Event m)
 
 
-
 -- | Returns True if the event stops the particle streaming.  I don't
 -- use a catch-all pattern because I want to be warned if this list is
 -- inexhaustive
-isFinalEvent :: (Mesh m) => Event m -> Bool
-isFinalEvent Timeout        = True
-isFinalEvent (c@Collide{})  = finalCollision $ collideType c
-isFinalEvent (b@Boundary{}) = finalBoundary  $ boundaryType b
+isFinalOutcome :: (Mesh m) => Outcome m -> Bool
+isFinalOutcome Timeout        = True
+isFinalOutcome (c@Collide{})  = finalCollision $ collideType c
+isFinalOutcome (b@Boundary{}) = finalBoundary  $ boundaryType b
+
+isStopper :: (Mesh m) => Event m -> Bool
+isStopper (Event _ outcome) = isFinalOutcome outcome

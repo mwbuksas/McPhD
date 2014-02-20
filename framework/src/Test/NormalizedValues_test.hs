@@ -3,7 +3,6 @@ module Test.NormalizedValues_test where
 -- Testing libraries
 import Test.Framework (testGroup)
 import Test.Framework.Providers.QuickCheck2 (testProperty)
-import Test.QuickCheck
 
 -- The library under test
 import NormalizedValues
